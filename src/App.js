@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Chat from "./components/Chat/Chat.js";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div>
+      <Chat />
+    </div>
+  );
+};
 
-export default App
+export default App;
