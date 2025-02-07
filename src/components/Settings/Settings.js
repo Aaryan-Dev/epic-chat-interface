@@ -2,25 +2,27 @@ import React from "react";
 import Modal from "react-modal";
 import ReactDOM from "react-dom";
 import { useTheme } from "../../Context/ThemeContext";
+import { useSpeech } from "../../Context/SpeechContext";
 import Switch from "react-switch";
-
-const CustomStyles = {
-  content: {
-    width: "250px",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
 
 const Settings = (props) => {
   const { modalIsOpen, closeModal } = props;
   const { themeMode, toggleTheme } = useTheme();
+  const { isSpeechEable, toggleSpeech } = useSpeech();
 
-  console.log(themeMode, toggleTheme);
+  const CustomStyles = {
+    content: {
+      width: "250px",
+      ...(themeMode === "dark" && { backgroundColor: "black", color: "white" }),
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -59,14 +61,14 @@ const Settings = (props) => {
           paddingBottom: "10px",
         }}
       >
-        Language
+        Speech recognition
         <div>
-          {/* <Switch
+          <Switch
             height={20}
             width={50}
-            onChange={toggleTheme}
-            checked={themeMode === "dark"}
-          /> */}
+            onChange={toggleSpeech}
+            checked={isSpeechEable}
+          />
         </div>
       </div>
       <div
@@ -78,15 +80,8 @@ const Settings = (props) => {
           paddingBottom: "10px",
         }}
       >
-        Speech recognition
-        <div>
-          {/* <Switch
-            height={20}
-            width={50}
-            onChange={toggleTheme}
-            checked={themeMode === "dark"}
-          /> */}
-        </div>
+        Language
+        <b>NA</b>
       </div>
     </Modal>
   );

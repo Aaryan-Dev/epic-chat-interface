@@ -7,6 +7,8 @@ import Settings from "../Settings/Settings";
 import { ToastContainer, toast } from "react-toastify";
 import { useToggle } from "../../Hooks/useToggle";
 import { useTheme } from "../../Context/ThemeContext";
+import { useSpeech } from "../../Context/SpeechContext";
+import SpeechInput from "../ChatContainer/SpeechInput";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -15,11 +17,11 @@ export default function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, openCloseModal] = useToggle(false);
   const { themeMode, toggleTheme } = useTheme();
-
-  console.log(themeMode, toggleTheme);
+  const { speechToText, setSpeechToText, isSpeechEable } = useSpeech();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setInput(speechToText);
     if (!input.trim() || isLoading) return;
 
     setIsLoading(true);
@@ -32,6 +34,7 @@ export default function Chat() {
     const userMessage = { role: "user", content: input };
     setData((prev) => [...prev, { ...userMessage, timestamp }]);
     setInput("");
+    setSpeechToText("");
 
     try {
       controllerRef.current = new AbortController();
@@ -110,7 +113,10 @@ export default function Chat() {
 
           <div>
             <b>Aryan's AI Chat Assistant </b>
-            <br></br> Speech recognition enabled
+            <br></br>
+            {isSpeechEable
+              ? "Speech recognition enabled"
+              : "Speech recognition disabled"}
           </div>
         </div>
 
@@ -188,11 +194,12 @@ export default function Chat() {
         <form onSubmit={handleSubmit} className="input-area">
           <input
             type="text"
-            value={input}
+            value={input || speechToText}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading}
           />
+          {isSpeechEable && <SpeechInput />}
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Sending..." : <LuSend size="1.25rem" />}
           </button>
