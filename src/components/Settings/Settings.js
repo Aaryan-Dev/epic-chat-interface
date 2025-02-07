@@ -81,7 +81,7 @@ const Settings = (props) => {
         }}
       >
         Language
-        <b>NA</b>
+        <b>English</b>
       </div>
     </Modal>
   );
