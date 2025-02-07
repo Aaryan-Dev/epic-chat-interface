@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 export default function Chat() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const controllerRef = useRef(null);
 
@@ -11,8 +11,14 @@ export default function Chat() {
     if (!input.trim() || isLoading) return;
 
     setIsLoading(true);
+    const timestamp = new Date().toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
     const userMessage = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    setData((prev) => [...prev, { ...userMessage, timestamp }]);
     setInput("");
 
     try {
@@ -21,36 +27,22 @@ export default function Chat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: [...messages, userMessage],
+          content: [userMessage],
           source: "text",
         }),
         signal: controllerRef.current.signal,
-      });
-
-      if (!response.ok) throw new Error("Request failed");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let assistantMessage = "";
-
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        assistantMessage += chunk;
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].content = assistantMessage;
-          return newMessages;
+      })
+        .then((res) => res.json())
+        .then((el) =>
+          setData((prev) => [...prev, { ...el, role: "assistant" }])
+        )
+        .catch((error) => {
+          throw new Error("Request failed");
         });
-      }
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error:", error);
-        setMessages((prev) => [
+        setData((prev) => [
           ...prev,
           {
             role: "assistant",
@@ -64,6 +56,8 @@ export default function Chat() {
     }
   };
 
+  console.log("data", data);
+
   const stopGeneration = () => {
     if (controllerRef.current) {
       controllerRef.current.abort();
@@ -74,7 +68,7 @@ export default function Chat() {
   return (
     <div className="container">
       <div className="chat-container">
-        {messages.map((msg, index) => (
+        {data.map((msg, index) => (
           <div
             style={
               msg.role === "user"
@@ -103,28 +97,41 @@ export default function Chat() {
               className="content"
             >
               {msg.content}
+              <br></br>
+              <div
+                style={{
+                  textAlign: "left",
+                  color: "grey",
+                  fontSize: "14px",
+                  paddingTop: "5px",
+                }}
+              >
+                {msg.timestamp}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="input-area">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-          disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Sending..." : "Send"}
-        </button>
-        {isLoading && (
-          <button type="button" onClick={stopGeneration}>
-            Stop
+      <div className="input-box">
+        <form onSubmit={handleSubmit} className="input-area">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your message..."
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send"}
           </button>
-        )}
-      </form>
+          {isLoading && (
+            <button type="button" onClick={stopGeneration}>
+              Stop
+            </button>
+          )}
+        </form>
+      </div>
 
       <style jsx>{`
         .container {
@@ -136,11 +143,12 @@ export default function Chat() {
         }
         .chat-container {
           height: 80vh;
+          z-index: 9;
+          position: relative;
           overflow-y: auto;
           border: 1px solid #ccc;
           padding: 10px;
           margin-bottom: 20px;
-          border-radius: 8px;
         }
         .message {
           padding: 5px;
@@ -150,6 +158,18 @@ export default function Chat() {
           margin-bottom: 5px;
           color: #666;
         }
+        .input-box {
+          display: flex;
+          // z-index: -1;
+          flex-direction: column;
+          justify-content: flex-end;
+          position: sticky;
+          bottom: 0;
+          padding: 10px;
+          margin: auto;
+          width: 98vw;
+        }
+
         .input-area {
           display: flex;
           gap: 10px;
