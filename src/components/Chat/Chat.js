@@ -3,13 +3,20 @@ import { LuSend } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdChatBubbleOutline } from "react-icons/md";
 import SyncLoader from "react-spinners/SyncLoader";
+import Settings from "../Settings/Settings";
 import { ToastContainer, toast } from "react-toastify";
+import { useToggle } from "../../Hooks/useToggle";
+import { useTheme } from "../../Context/ThemeContext";
 
 export default function Chat() {
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const controllerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalIsOpen, openCloseModal] = useToggle(false);
+  const { themeMode, toggleTheme } = useTheme();
+
+  console.log(themeMode, toggleTheme);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +39,10 @@ export default function Chat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: [userMessage],
+          content: [
+            ...data.map((el) => ({ role: el.role, content: el.content })),
+            userMessage,
+          ],
           source: "text",
         }),
         signal: controllerRef.current.signal,
@@ -54,8 +64,6 @@ export default function Chat() {
       controllerRef.current = null;
     }
   };
-
-  console.log("isLoading", isLoading);
 
   const stopGeneration = () => {
     if (controllerRef.current) {
@@ -106,11 +114,10 @@ export default function Chat() {
           </div>
         </div>
 
-        <div>
+        <div style={{ cursor: "pointer" }} onClick={openCloseModal}>
           <IoSettingsOutline size="1.25rem" />
         </div>
       </div>
-
       <div className="chat-container">
         {data.map((msg, index) => (
           <div
@@ -170,13 +177,13 @@ export default function Chat() {
           cssOverride={{
             display: "block",
             margin: "auto",
+            paddingLeft: "5px",
           }}
           size={10}
           aria-label="Loading Spinner"
           data-testid="loader"
         />
       </div>
-
       <div className="input-box">
         <form onSubmit={handleSubmit} className="input-area">
           <input
@@ -196,7 +203,6 @@ export default function Chat() {
           )}
         </form>
       </div>
-
       <style jsx>{`
         .container {
           margin: 0 auto;
@@ -206,8 +212,7 @@ export default function Chat() {
           border-radius: 5px;
         }
         .chat-container {
-          height: 70vh;
-          z-index: 9;
+          height: 80vh;
           background-color: #f9fafb;
           position: relative;
           overflow-y: auto;
@@ -225,7 +230,8 @@ export default function Chat() {
         }
         .input-box {
           display: flex;
-          // z-index: -1;
+          z-index: 9;
+          background-color: #ffffff;
           flex-direction: column;
           justify-content: flex-end;
           position: sticky;
@@ -250,6 +256,7 @@ export default function Chat() {
           background-color: #0070f3;
           color: white;
           border: none;
+          cursor: pointer;
           border-radius: 5px;
           cursor: pointer;
         }
@@ -258,6 +265,17 @@ export default function Chat() {
           cursor: not-allowed;
         }
       `}</style>
+      {themeMode === "dark" && (
+        <style jsx>{`
+          button {
+            background-color: black;
+          }
+          .chat-container {
+            background-color: black;
+          }
+        `}</style>
+      )}
+      <Settings modalIsOpen={modalIsOpen} closeModal={openCloseModal} />
     </div>
   );
 }

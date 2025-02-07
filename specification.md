@@ -1,3 +1,7 @@
+<!-- language -->
+<!-- speech -->
+<!-- quick suggestion -->
+
 # Technical Specification
 
 ## 1. System Requirements
@@ -16,13 +20,13 @@
 -   Input System
 
     -   Text input field 
-    -   Speech recognition toggle |
+    -   Speech recognition toggle |-------
     -   Send button 
-    -   Quick reply suggestions |
+    -   Quick reply suggestions |------
 
 -   Settings Panel
     -   Theme switcher |
-    -   Language selection |
+    -   Language selection |----------
     -   Speech recognition settings |
 
 ### 1.2 Data Flow
@@ -109,15 +113,15 @@ Response: {
 
 #### Speech Recognition
 
--   Use Browser's Speech Recognition API |
--   Handle browser compatibility |
--   Provide visual feedback |
--   Manage recording states |
+-   Use Browser's Speech Recognition API 
+-   Handle browser compatibility 
+-   Provide visual feedback 
+-   Manage recording states 
 
 ### 3.2 Styling Requirements
 
 -   Implement responsive design
--   Support dark/light themes |
+-   Support dark/light themes 
 -   Use CSS-in-JS or Tailwind
 -   Handle mobile views
 -   Smooth transitions
@@ -193,8 +197,8 @@ services:
 ### 6.1 Core Requirements
 
 -   Real-time interactions
--   Speech recognition |
--   Theme switching |
+-   Speech recognition 
+-   Theme switching 
 -   Error handling 
 -   Responsive design
 

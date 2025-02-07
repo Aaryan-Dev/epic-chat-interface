@@ -1,10 +1,13 @@
 import React from "react";
 import Chat from "./components/Chat/Chat.js";
+import { ThemeProvider } from "./Context/ThemeContext";
 
 const App = () => {
   return (
     <div>
-      <Chat />
+      <ThemeProvider>
+        <Chat />
+      </ThemeProvider>
     </div>
   );
 };
