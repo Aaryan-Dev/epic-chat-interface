@@ -8,22 +8,22 @@
 
 -   Message Thread Display
 
-    -   User/AI message bubbles
-    -   Timestamps
-    -   Input source indicators
-    -   Loading states
+    -   User/AI message bubbles 
+    -   Timestamps 
+    -   Input source indicators 
+    -   Loading states 
 
 -   Input System
 
-    -   Text input field
-    -   Speech recognition toggle
-    -   Send button
-    -   Quick reply suggestions
+    -   Text input field 
+    -   Speech recognition toggle |
+    -   Send button 
+    -   Quick reply suggestions |
 
 -   Settings Panel
-    -   Theme switcher
-    -   Language selection
-    -   Speech recognition settings
+    -   Theme switcher |
+    -   Language selection |
+    -   Speech recognition settings |
 
 ### 1.2 Data Flow
 
@@ -41,7 +41,7 @@
 
 #### Chat State Interface
 
-```typescript
+```typescript |
 interface Message {
 	id: string;
 	content: string;
@@ -109,15 +109,15 @@ Response: {
 
 #### Speech Recognition
 
--   Use Browser's Speech Recognition API
--   Handle browser compatibility
--   Provide visual feedback
--   Manage recording states
+-   Use Browser's Speech Recognition API |
+-   Handle browser compatibility |
+-   Provide visual feedback |
+-   Manage recording states |
 
 ### 3.2 Styling Requirements
 
 -   Implement responsive design
--   Support dark/light themes
+-   Support dark/light themes |
 -   Use CSS-in-JS or Tailwind
 -   Handle mobile views
 -   Smooth transitions
@@ -125,10 +125,10 @@ Response: {
 ### 3.3 State Management
 
 -   Implement chat reducer
--   Use Context for themes
+-   Use Context for themes |
 -   Handle async operations
 -   Manage error states
--   Persist settings
+-   Persist settings |
 
 ## 4. Docker Configuration
 
@@ -174,14 +174,14 @@ services:
 -   Node.js 18+
 -   Docker
 
-### 5.2 Testing Requirements
+### 5.2 Testing Requirements |
 
 -   Component unit tests
 -   Hook testing
 -   Integration tests
 -   Accessibility tests
 
-### 5.3 Documentation Requirements
+### 5.3 Documentation Requirements |
 
 -   Component documentation
 -   Setup instructions
@@ -193,9 +193,9 @@ services:
 ### 6.1 Core Requirements
 
 -   Real-time interactions
--   Speech recognition
--   Theme switching
--   Error handling
+-   Speech recognition |
+-   Theme switching |
+-   Error handling 
 -   Responsive design
 
 ### 6.2 Excellence Indicators
@@ -227,7 +227,7 @@ project/
 └── README.md
 ```
 
-### 7.2 Documentation Requirements
+### 7.2 Documentation Requirements |
 
 -   Setup guide
 -   Architecture decisions

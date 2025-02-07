@@ -1,5 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import react, { useState, useRef, useEffect } from "react";
 import { LuSend } from "react-icons/lu";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdChatBubbleOutline } from "react-icons/md";
+import SyncLoader from "react-spinners/SyncLoader";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -43,13 +47,7 @@ export default function Chat() {
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error:", error);
-        setData((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "Error: Failed to fetch response",
-          },
-        ]);
+        toast("Failed to fetch response!");
       }
     } finally {
       setIsLoading(false);
@@ -57,7 +55,7 @@ export default function Chat() {
     }
   };
 
-  console.log("data", data);
+  console.log("isLoading", isLoading);
 
   const stopGeneration = () => {
     if (controllerRef.current) {
@@ -83,6 +81,36 @@ export default function Chat() {
 
   return (
     <div className="container">
+      <ToastContainer />
+      <div
+        style={{
+          padding: "15px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+          }}
+        >
+          <button style={{ borderRadius: "50%", padding: "10px 12px" }}>
+            <MdChatBubbleOutline size="1.25rem" />
+          </button>
+
+          <div>
+            <b>Aryan's AI Chat Assistant </b>
+            <br></br> Speech recognition enabled
+          </div>
+        </div>
+
+        <div>
+          <IoSettingsOutline size="1.25rem" />
+        </div>
+      </div>
+
       <div className="chat-container">
         {data.map((msg, index) => (
           <div
@@ -104,7 +132,7 @@ export default function Chat() {
               style={
                 msg.role === "user"
                   ? {
-                      background: "#3a80f2",
+                      background: "#0070f3",
                       color: "white",
                     }
                   : {
@@ -136,6 +164,17 @@ export default function Chat() {
             </div>
           </div>
         ))}
+        <SyncLoader
+          color={"#0070f3"}
+          loading={isLoading}
+          cssOverride={{
+            display: "block",
+            margin: "auto",
+          }}
+          size={10}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
       </div>
 
       <div className="input-box">
@@ -167,7 +206,7 @@ export default function Chat() {
           border-radius: 5px;
         }
         .chat-container {
-          height: 80vh;
+          height: 70vh;
           z-index: 9;
           background-color: #f9fafb;
           position: relative;
@@ -211,7 +250,7 @@ export default function Chat() {
           background-color: #0070f3;
           color: white;
           border: none;
-          border-radius: 4px;
+          border-radius: 5px;
           cursor: pointer;
         }
         button:disabled {
