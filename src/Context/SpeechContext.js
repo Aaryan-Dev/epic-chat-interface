@@ -8,7 +8,6 @@ const SpeechContext = createContext({
 
 // Create provider component
 export const SpeechProvider = ({ children }) => {
-  console.log("okokokok");
   const [speechToText, setSpeechToText] = useState("");
   const [isSpeechEable, setIsSpeechEable] = useState(true);
 
