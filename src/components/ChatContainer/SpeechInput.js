@@ -6,7 +6,7 @@ import { useSpeech } from "../../Context/SpeechContext";
 const SpeechInput = () => {
   const [isListening, setIsListening] = useState(false);
   const [text, setText] = useState("");
-  const [status, setStatus] = useState("Click Start to begin listening");
+  const [status, setStatus] = useState("");
   const [savedTexts, setSavedTexts] = useState([]);
   const { addSpeech } = useSpeech();
 
@@ -75,6 +75,7 @@ const SpeechInput = () => {
   return (
     <div className="speech-container">
       <button
+        type="button"
         style={isListening ? { backgroundColor: "grey" } : {}}
         onClick={startListening}
       >
@@ -83,10 +84,6 @@ const SpeechInput = () => {
           <CiMicrophoneOff backgroundColor="white" size="1.25rem" />
         )}
       </button>
-
-      {/* <div className="text-display">
-        <p>{text}</p>
-      </div> */}
     </div>
   );
 };

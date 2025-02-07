@@ -21,9 +21,12 @@ export default function Chat() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setInput(speechToText);
-    if (!input.trim() || isLoading) return;
 
+    if (!speechToText && !input) {
+      return;
+    }
+
+    setInput(speechToText);
     setIsLoading(true);
     const timestamp = new Date().toLocaleTimeString("en-US", {
       hour: "numeric",
@@ -31,25 +34,28 @@ export default function Chat() {
       hour12: true,
     });
 
-    const userMessage = { role: "user", content: input };
+    const userMessage = { role: "user", content: speechToText || input };
     setData((prev) => [...prev, { ...userMessage, timestamp }]);
     setInput("");
     setSpeechToText("");
 
     try {
       controllerRef.current = new AbortController();
-      const response = await fetch("http://localhost:3001/api/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: [
-            ...data.map((el) => ({ role: el.role, content: el.content })),
-            userMessage,
-          ],
-          source: "text",
-        }),
-        signal: controllerRef.current.signal,
-      })
+      const response = await fetch(
+        "https://mock-epic-chat-interface-api.onrender.com/api/messages",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: [
+              ...data.map((el) => ({ role: el.role, content: el.content })),
+              userMessage,
+            ],
+            source: "text",
+          }),
+          signal: controllerRef.current.signal,
+        }
+      )
         .then((res) => res.json())
         .then((el) =>
           setData((prev) => [...prev, { ...el, role: "assistant" }])
@@ -194,13 +200,21 @@ export default function Chat() {
         <form onSubmit={handleSubmit} className="input-area">
           <input
             type="text"
-            value={input || speechToText}
+            value={speechToText || input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading}
           />
-          {isSpeechEable && <SpeechInput />}
-          <button type="submit" disabled={isLoading}>
+          {isSpeechEable && (
+            <span>
+              <SpeechInput />
+            </span>
+          )}
+          <button
+            style={{ display: "flex" }}
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? "Sending..." : <LuSend size="1.25rem" />}
           </button>
           {isLoading && (
