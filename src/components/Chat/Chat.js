@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { LuSend } from "react-icons/lu";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -65,6 +66,21 @@ export default function Chat() {
     }
   };
 
+  useEffect(() => {
+    const timestamp = new Date().toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    setData([
+      {
+        role: "assistant",
+        content: "Hello! How can I assist you today!",
+        timestamp,
+      },
+    ]);
+  }, []);
+
   return (
     <div className="container">
       <div className="chat-container">
@@ -88,10 +104,12 @@ export default function Chat() {
               style={
                 msg.role === "user"
                   ? {
-                      background: "#f0f0f0",
+                      background: "#3a80f2",
+                      color: "white",
                     }
                   : {
-                      background: "#e3f2fd",
+                      background: "#ffffff",
+                      boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
                     }
               }
               className="content"
@@ -101,9 +119,16 @@ export default function Chat() {
               <div
                 style={{
                   textAlign: "left",
-                  color: "grey",
                   fontSize: "14px",
                   paddingTop: "5px",
+
+                  ...(msg.role === "user"
+                    ? {
+                        color: "#adcbfb",
+                      }
+                    : {
+                        color: "#a5aab1",
+                      }),
                 }}
               >
                 {msg.timestamp}
@@ -123,7 +148,7 @@ export default function Chat() {
             disabled={isLoading}
           />
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send"}
+            {isLoading ? "Sending..." : <LuSend size="1.25rem" />}
           </button>
           {isLoading && (
             <button type="button" onClick={stopGeneration}>
@@ -144,6 +169,7 @@ export default function Chat() {
         .chat-container {
           height: 80vh;
           z-index: 9;
+          background-color: #f9fafb;
           position: relative;
           overflow-y: auto;
           border: 1px solid #ccc;
