@@ -7,6 +7,7 @@ import Settings from "../Settings/Settings";
 import { ToastContainer, toast } from "react-toastify";
 import { useToggle } from "../../Hooks/useToggle";
 import { useTheme } from "../../Context/ThemeContext";
+import { CiMicrophoneOn } from "react-icons/ci";
 import { useSpeech } from "../../Context/SpeechContext";
 import SpeechInput from "../ChatContainer/SpeechInput";
 
@@ -35,7 +36,14 @@ export default function Chat() {
     });
 
     const userMessage = { role: "user", content: speechToText || input };
-    setData((prev) => [...prev, { ...userMessage, timestamp }]);
+    setData((prev) => [
+      ...prev,
+      {
+        ...userMessage,
+        timestamp,
+        ...(speechToText ? { source: "speech" } : { source: "text" }),
+      },
+    ]);
     setInput("");
     setSpeechToText("");
 
@@ -161,7 +169,13 @@ export default function Chat() {
               }
               className="content"
             >
-              {msg.content}
+              {msg?.source === "speech" && (
+                <spam style={{ fontSize: "12px", color: "#adcbfb" }}>
+                  <CiMicrophoneOn /> Voice message
+                </spam>
+              )}
+              <br></br>
+              {msg?.content}
               <br></br>
               <div
                 style={{
@@ -200,7 +214,7 @@ export default function Chat() {
         <form onSubmit={handleSubmit} className="input-area">
           <input
             type="text"
-            value={speechToText || input}
+            value={speechToText ? speechToText + "..." : input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading}

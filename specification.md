@@ -1,5 +1,4 @@
 <!-- language -->
-<!-- speech -->
 <!-- quick suggestion -->
 
 # Technical Specification
@@ -20,14 +19,14 @@
 -   Input System
 
     -   Text input field 
-    -   Speech recognition toggle |-------
+    -   Speech recognition toggle
     -   Send button 
-    -   Quick reply suggestions |------
+    -   Quick reply suggestions |
 
 -   Settings Panel
-    -   Theme switcher |
-    -   Language selection |----------
-    -   Speech recognition settings |
+    -   Theme switcher
+    -   Language selection |
+    -   Speech recognition settings
 
 ### 1.2 Data Flow
 
