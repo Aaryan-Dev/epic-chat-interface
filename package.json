@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "-": "^0.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
     "commitizen": "^4.3.1",
     "cra-template": "1.2.0",
+    "jest": "^27.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
@@ -15,7 +17,8 @@
     "react-spinners": "^0.15.0",
     "react-switch": "^7.1.0",
     "react-toastify": "^11.0.3",
-    "save-dev": "^0.0.1-security"
+    "save-dev": "^0.0.1-security",
+    "yarn": "^1.22.22"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,5 +49,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "jest-environment-jsdom": "^29.7.0"
   }
 }

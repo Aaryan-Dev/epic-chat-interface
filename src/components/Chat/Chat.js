@@ -170,9 +170,9 @@ export default function Chat() {
               className="content"
             >
               {msg?.source === "speech" && (
-                <spam style={{ fontSize: "12px", color: "#adcbfb" }}>
+                <span style={{ fontSize: "12px", color: "#adcbfb" }}>
                   <CiMicrophoneOn /> Voice message
-                </spam>
+                </span>
               )}
               <br></br>
               {msg?.content}
