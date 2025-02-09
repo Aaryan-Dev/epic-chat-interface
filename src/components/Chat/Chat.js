@@ -98,7 +98,7 @@ export default function Chat() {
     setData([
       {
         role: "assistant",
-        content: "Hello! How can I assist you today!",
+        content: "Hello! How can I assist you today?",
         timestamp,
       },
     ]);
